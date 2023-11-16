@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "author": "Samuel Kopp (https://samuelkopp.de)",
   "license": "MIT",
-  "description": "A low-level OpenAPI client for DigitalOcean's API.",
+  "description": "A preconfigured OpenAPI client for DigitalOcean's API.",
   "funding": "https://github.com/sponsors/boywithkeyboard",
   "repository": "github:boywithkeyboard/digitalocean-openapi",
   "main": "./dist/index.cjs",
