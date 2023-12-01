@@ -1,12 +1,19 @@
-## digitalocean-openapi
+## openapi-digitalocean
 
-> [!WARNING]
-> This package is **NOT** intended to be used directly, as it is neither stable nor flawless.
+### Setup
 
 ```bash
-npm i digitalocean-openapi
+npm i openapi-digitalocean
 ```
 
 ```ts
-import { createClientV2 } from 'digitalocean-openapi'
+import { createClient } from 'openapi-digitalocean/v2'
+```
+
+### Usage
+
+```ts
+const client = new createClient({
+  token: '...'
+})
 ```
