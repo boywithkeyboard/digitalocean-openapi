@@ -578,6 +578,16 @@ export interface paths {
      */
     post: operations["databases_create_replica"];
   };
+  "/v2/databases/{database_cluster_uuid}/events": {
+    /**
+     * List all Events Logs
+     * @description To list all of the cluster events, send a GET request to
+     * `/v2/databases/$DATABASE_ID/events`.
+     *
+     * The result will be a JSON object with a `events` key.
+     */
+    get: operations["databases_list_events_logs"];
+  };
   "/v2/databases/{database_cluster_uuid}/replicas/{replica_name}": {
     /**
      * Retrieve an Existing Read-only Replica
@@ -3297,10 +3307,18 @@ export interface components {
       /**
        * @description - DOCKER_HUB: The DockerHub container registry type.
        * - DOCR: The DigitalOcean container registry type.
+       * - GHCR: The Github container registry type.
        * @example DOCR
        * @enum {string}
        */
-      registry_type?: "DOCKER_HUB" | "DOCR";
+      registry_type?: "DOCKER_HUB" | "DOCR" | "GHCR";
+      /**
+       * @description The credentials to be able to pull the image. The value will be encrypted on first submission. On following submissions, the encrypted value should be used.
+       * - "$username:$access_token" for registries of type `DOCKER_HUB`.
+       * - "$username:$access_token" for registries of type `GHCR`.
+       * @example my-dockerhub-username:dckr_pat_the_access_token
+       */
+      registry_credentials?: string;
       /**
        * @description The repository name.
        * @example origin/master
@@ -6159,6 +6177,29 @@ export interface components {
        * @example 61440
        */
       storage_size_mib?: number;
+    };
+    events_logs: {
+      /**
+       * @description ID of the particular event.
+       * @example pe8u2huh
+       */
+      id?: string;
+      /**
+       * @description The name of cluster.
+       * @example sample_cluster
+       */
+      cluster_name?: string;
+      /**
+       * @description Type of the event.
+       * @example cluster_create
+       * @enum {string}
+       */
+      event_type?: "cluster_maintenance_perform" | "cluster_master_promotion" | "cluster_create" | "cluster_update" | "cluster_delete" | "cluster_poweron" | "cluster_poweroff";
+      /**
+       * @description The time of the generation of a event.
+       * @example 2020-10-29T15:57:38Z
+       */
+      create_time?: string;
     };
     database: {
       /**
@@ -10284,6 +10325,19 @@ export interface components {
         };
       };
     };
+    /** @description A JSON object with a key of `events`. */
+    events_logs: {
+      headers: {
+        "ratelimit-limit": components["headers"]["ratelimit-limit"];
+        "ratelimit-remaining": components["headers"]["ratelimit-remaining"];
+        "ratelimit-reset": components["headers"]["ratelimit-reset"];
+      };
+      content: {
+        "application/json": {
+          events?: components["schemas"]["events_logs"][];
+        };
+      };
+    };
     /** @description A JSON object with a key of `users`. */
     users: {
       headers: {
@@ -14201,6 +14255,28 @@ export interface operations {
     };
     responses: {
       201: components["responses"]["database_replica"];
+      401: components["responses"]["unauthorized"];
+      404: components["responses"]["not_found"];
+      429: components["responses"]["too_many_requests"];
+      500: components["responses"]["server_error"];
+      default: components["responses"]["unexpected_error"];
+    };
+  };
+  /**
+   * List all Events Logs
+   * @description To list all of the cluster events, send a GET request to
+   * `/v2/databases/$DATABASE_ID/events`.
+   *
+   * The result will be a JSON object with a `events` key.
+   */
+  databases_list_events_logs: {
+    parameters: {
+      path: {
+        database_cluster_uuid: components["parameters"]["database_cluster_uuid"];
+      };
+    };
+    responses: {
+      200: components["responses"]["events_logs"];
       401: components["responses"]["unauthorized"];
       404: components["responses"]["not_found"];
       429: components["responses"]["too_many_requests"];
