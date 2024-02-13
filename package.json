@@ -48,7 +48,7 @@
     "@boywithkeyboard/builder": "^0.4.2",
     "@types/node": "^20.10.1",
     "openapi-typescript": "^6.7.1",
-    "typescript": "^5.3.2"
+    "typescript": "^5.3.3"
   },
   "engines": {
     "node": ">=18"
