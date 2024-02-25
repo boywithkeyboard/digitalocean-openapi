@@ -1,3 +1,6 @@
+> [!WARNING]  
+> Please use [digitalocean-api-client](boywithkeyboard/digitalocean-api-client) instead!
+
 ## openapi-digitalocean
 
 ### Setup
